@@ -94,7 +94,11 @@ func (r *ResourcePublicIp) Schema(
 				Optional:      false,
 				PlanModifiers: []planmodifier.String{stringplanmodifier.UseStateForUnknown()},
 			},
-			"tags": schema.MapAttribute{ElementType: types.StringType, Required: true},
+			"tags": schema.MapAttribute{
+				Description: "User-defined metadata of key-value pairs",
+				ElementType: types.StringType,
+				Required:    true,
+			},
 			"created": schema.StringAttribute{
 				Description:   "the time when the public ip is created",
 				Required:      false,

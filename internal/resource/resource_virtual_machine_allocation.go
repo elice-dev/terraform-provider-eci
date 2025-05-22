@@ -108,6 +108,7 @@ func (r *ResourceVirtualMachineAllocation) Schema(
 				PlanModifiers: []planmodifier.String{stringplanmodifier.UseStateForUnknown()},
 			},
 			"tags": schema.MapAttribute{
+				Description:   "User-defined metadata of key-value pairs",
 				ElementType:   types.StringType,
 				Required:      true,
 				PlanModifiers: []planmodifier.Map{mapplanmodifier.RequiresReplace()},

@@ -1,3 +1,3 @@
-data "eci_block_storage_image" "ubuntu2204" {
-  name="Ubuntu 22.04"
+data "eci_instance_type" "test_instance_type" {
+  name="tiny"
 }

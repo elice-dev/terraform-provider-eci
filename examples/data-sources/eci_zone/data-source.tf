@@ -1,4 +1,4 @@
 data "eci_zone" "zone_test" {
   name="Test-Zone"
-  region_id="${data.eci_region.region_seoul1.id}"
+  region_id="02d41f09-6efa-487c-81a5-f40c9ac996c5"
 }

@@ -102,7 +102,11 @@ func (r *ResourceBlockStorage) Schema(
 				Computed:      true,
 				PlanModifiers: []planmodifier.String{stringplanmodifier.UseStateForUnknown()},
 			},
-			"tags": schema.MapAttribute{ElementType: types.StringType, Required: true},
+			"tags": schema.MapAttribute{
+				Description: "User-defined metadata of key-value pairs",
+				ElementType: types.StringType,
+				Required:    true,
+			},
 			"name": schema.StringAttribute{
 				Description: "name of the block storage",
 				Required:    true,
