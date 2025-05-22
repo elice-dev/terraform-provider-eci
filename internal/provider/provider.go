@@ -62,11 +62,12 @@ func (p *EliceCloudProvider) Schema(
 			"api_access_token": schema.StringAttribute{
 				Description: "API access token",
 				Required:    true,
-				Sensitive:   true, // Prevents logging the token
+				Sensitive:   true,
 			},
 			"api_endpoint": schema.StringAttribute{
-				Description: "API endpoint URL (e.g., https://admin.elice.cloud/api/docs)",
-				Required:    true},
+				Description: "API endpoint URL (e.g., https://admin.elice.cloud/api/)",
+				Required:    true,
+			},
 			"zone_id": schema.StringAttribute{
 				Description: "ID of the zone (UUID) that you will manage resources in",
 				Required:    true,

@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     eci = {
-      source = "hashicorp.com/edu/eci"
+      source = "github.com/elice-dev/eci"
     }
   }
 }

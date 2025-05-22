@@ -1,4 +1,4 @@
-## Requirements
+# terraform-provider-eci
 
 ## Requirements
 
@@ -27,7 +27,7 @@ To indicate terraform to use a local binary as a provider, modify `~/.terraformr
 provider_installation {
 
   dev_overrides {
-      "hashicorp.com/edu/eci" = "/home/users/wonjung/iaas/elice-cloud-iaas-terraform-provider/bin"
+      "github.com/elice-dev/eci" = "/home/users/wonjung/terraform-provider-eci/bin"
   }
 
   direct {}

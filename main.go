@@ -10,6 +10,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/providerserver"
 )
 
+var (
+	version string = "dev"
+)
+
 func main() {
 	var debug bool
 
@@ -22,18 +26,12 @@ func main() {
 	flag.Parse()
 
 	opts := providerserver.ServeOpts{
-		// NOTE: This is not a typical Terraform Registry provider address,
-		// such as registry.terraform.io/hashicorp/hashicups. This specific
-		// provider address is used in these tutorials in conjunction with a
-		// specific Terraform CLI configuration for manual development testing
-		// of this provider.
-		// TODO: change to a valid one before publishing
-		Address:         "hashicorp.com/edu/eci",
+		Address:         "github.com/elice-dev/eci",
 		Debug:           debug,
 		ProtocolVersion: 6,
 	}
 
-	err := providerserver.Serve(context.Background(), provider.New("0.1.0", debug), opts)
+	err := providerserver.Serve(context.Background(), provider.New(version, debug), opts)
 
 	if err != nil {
 		log.Fatal(err.Error())

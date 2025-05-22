@@ -7,6 +7,6 @@ To run any example, clone the repository and run terraform apply within the exam
 For example:
 
 ```
-% cd two-tier
+% cd vm-with-two-network-interfaces
 % terraform apply
 ...
