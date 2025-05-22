@@ -1,0 +1,26 @@
+image: golang:latest
+
+stages:
+  - test
+  - build
+  - deploy
+
+format:
+  stage: test
+  script:
+    - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.64.5
+    - go install github.com/segmentio/golines@latest
+    - make check
+
+compile:
+  stage: build
+  script:
+    - make build
+  artifacts:
+    paths:
+      - bin/
+
+deploy:
+  stage: deploy
+  script: echo "Define your deployment script!"
+  environment: production
