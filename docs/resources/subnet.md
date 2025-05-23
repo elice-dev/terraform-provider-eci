@@ -33,7 +33,7 @@ resource "eci_subnet" "my_subnet" {
 - `name` (String) human-readable name of the subnet
 - `network_gw` (String) IPv4 interface address of the subnet, e.g., `192.168.0.1/24`
 - `purpose` (String) purpose of the subnet, e.g., `virtual_machine`
-- `tags` (Map of String)
+- `tags` (Map of String) User-defined metadata of key-value pairs
 
 ### Read-Only
 

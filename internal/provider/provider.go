@@ -56,7 +56,6 @@ func (p *EliceCloudProvider) Schema(
 	_ provider.SchemaRequest,
 	resp *provider.SchemaResponse,
 ) {
-
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"api_access_token": schema.StringAttribute{
@@ -180,6 +179,9 @@ func (p *EliceCloudProvider) Resources(_ context.Context) []func() resource.Reso
 	return []func() resource.Resource{
 		func() resource.Resource {
 			return res.NewResourceBlockStorage()
+		},
+		func() resource.Resource {
+			return res.NewResourceBlockStorageSnapshot()
 		},
 		func() resource.Resource {
 			return res.NewResourceVirtualMachine()

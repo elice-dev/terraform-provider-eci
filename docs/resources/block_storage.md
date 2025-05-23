@@ -34,7 +34,7 @@ resource "eci_block_storage" "my_block_storage" {
 - `dr` (Boolean) whether to enable DR support
 - `name` (String) name of the block storage
 - `size_gib` (Number) size of the block storage (GiB)
-- `tags` (Map of String)
+- `tags` (Map of String) User-defined metadata of key-value pairs
 
 ### Optional
 
