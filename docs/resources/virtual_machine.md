@@ -36,7 +36,7 @@ resource "eci_virtual_machine" "my_virtual_machine" {
 - `instance_type_id` (String) id of instance type that the virtual machine is created from
 - `name` (String) human-readable name of the virtual machine
 - `password` (String, Sensitive) password of first user that the virtual machine will generate
-- `tags` (Map of String)
+- `tags` (Map of String) User-defined metadata of key-value pairs
 - `username` (String) name of first user that the virtual machine will generate
 
 ### Read-Only

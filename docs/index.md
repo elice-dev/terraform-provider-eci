@@ -26,5 +26,5 @@ provider "eci" {
 ### Required
 
 - `api_access_token` (String, Sensitive) API access token
-- `api_endpoint` (String) API endpoint URL (e.g., https://admin.elice.cloud/api/docs)
+- `api_endpoint` (String) API endpoint URL (e.g., https://admin.elice.cloud/api/)
 - `zone_id` (String) ID of the zone (UUID) that you will manage resources in

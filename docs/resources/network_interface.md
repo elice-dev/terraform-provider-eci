@@ -33,7 +33,7 @@ resource "eci_network_interface" "my_network_interface" {
 - `attached_subnet_id` (String) id of subnet that the network interface attaches to
 - `dr` (Boolean) whether to enable DR support
 - `name` (String) human-readable name for the network interface
-- `tags` (Map of String)
+- `tags` (Map of String) User-defined metadata of key-value pairs
 
 ### Optional
 

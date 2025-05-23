@@ -6,6 +6,12 @@ terraform {
   }
 }
 
+provider "eci" {
+  api_endpoint = "https://portal.elice.cloud/api"
+  api_access_token = "u_Zb0eS2Orcu9Pv8EBfdf9D9aQiANHnqCsNt_Hy3TBIA"
+  zone_id="cb67250d-0050-44fa-9872-c8dd7fb9e614"
+}
+
 data "eci_block_storage_image" "ubuntu2204" {
   name="Ubuntu 22.04"
 }
@@ -22,13 +28,6 @@ data "eci_zone" "test_zone" {
 data "eci_instance_type" "test_instance_type" {
   name="tiny"
 }
-
-provider "eci" {
-  api_endpoint = "https://portal.elice.cloud/api"
-  api_access_token = "u_Zb0eS2Orcu9Pv8EBfdf9D9aQiANHnqCsNt_Hy3TBIA"
-  zone_id="cb67250d-0050-44fa-9872-c8dd7fb9e614"
-}
-
 
 resource "eci_virtual_machine" "my_virtual_machine" {
   name="terraform-test-vm-1"

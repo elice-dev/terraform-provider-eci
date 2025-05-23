@@ -14,9 +14,7 @@ Public IP
 
 ```terraform
 resource "eci_public_ip" "my_public_ip" {
-  attached_network_interface_id=(
-    "4adf2682-d8f3-451c-8bfc-3383deb424a5"
-  )
+  attached_network_interface_id="4adf2682-d8f3-451c-8bfc-3383deb424a5"
   dr=false
   tags = {
     "created-by": "terraform"
@@ -31,7 +29,7 @@ resource "eci_public_ip" "my_public_ip" {
 
 - `attached_network_interface_id` (String) id of network interface that the public ip attaches to
 - `dr` (Boolean) whether to enable DR support
-- `tags` (Map of String)
+- `tags` (Map of String) User-defined metadata of key-value pairs
 
 ### Read-Only
 

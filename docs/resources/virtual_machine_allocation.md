@@ -27,7 +27,7 @@ resource "eci_virtual_machine_allocation" "my_vm_allocation" {
 ### Required
 
 - `machine_id` (String) id of virtual machine that this allocation is instantiated from
-- `tags` (Map of String)
+- `tags` (Map of String) User-defined metadata of key-value pairs
 
 ### Read-Only
 
