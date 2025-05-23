@@ -1,14 +1,14 @@
 terraform {
   required_providers {
     eci = {
-      source = "github.com/elice-dev/eci"
+      source = "elice-dev/eci"
     }
   }
 }
 
 provider "eci" {
   api_endpoint = "https://portal.elice.cloud/api"
-  api_access_token = "u_Zb0eS2Orcu9Pv8EBfdf9D9aQiANHnqCsNt_Hy3TBIA"
+  api_access_token = "uIfcvZuf9d6s9q5_hnngnL2Ylqnts1O4lPDFcQzVmBeQ"
   zone_id="cb67250d-0050-44fa-9872-c8dd7fb9e614"
 }
 
