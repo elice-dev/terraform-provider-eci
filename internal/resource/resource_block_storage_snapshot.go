@@ -83,7 +83,7 @@ func resourceBlockStorageSnapshotGetResponseToBlockStorageSnapshotModel(
 func (r *ResourceBlockStorageSnapshot) Metadata(
 	ctx context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse,
 ) {
-	resp.TypeName = req.ProviderTypeName + "_block_storag_snapshot "
+	resp.TypeName = req.ProviderTypeName + "_block_storage_snapshot"
 }
 
 func (r *ResourceBlockStorageSnapshot) Schema(
@@ -217,7 +217,7 @@ func (r *ResourceBlockStorageSnapshot) Create(
 
 	response, err := r.client.PostBlockStorageSnapshot(
 		plan.Name.ValueString(),
-		plan.BlockStorageId.String(),
+		plan.BlockStorageId.ValueString(),
 		tags,
 	)
 
