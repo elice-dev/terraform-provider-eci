@@ -166,7 +166,7 @@ func (r *ResourceBlockStorageSnapshot) Schema(
 			},
 			"dr": schema.BoolAttribute{
 				Description:   "whether to enable DR support",
-				Required:      true,
+				Computed:      true,
 				PlanModifiers: []planmodifier.Bool{boolplanmodifier.RequiresReplace()},
 			},
 			"status": schema.StringAttribute{
