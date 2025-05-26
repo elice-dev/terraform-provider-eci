@@ -35,11 +35,12 @@ type ResourceVirtualMachineModel struct {
 	OrganizationId types.String `tfsdk:"organization_id"`
 	InstanceTypeId types.String `tfsdk:"instance_type_id"`
 
-	AlwaysOn types.Bool   `tfsdk:"always_on"`
-	Name     types.String `tfsdk:"name"`
-	DR       types.Bool   `tfsdk:"dr"`
-	Username types.String `tfsdk:"username"`
-	Password types.String `tfsdk:"password"`
+	AlwaysOn     types.Bool   `tfsdk:"always_on"`
+	Name         types.String `tfsdk:"name"`
+	DR           types.Bool   `tfsdk:"dr"`
+	Username     types.String `tfsdk:"username"`
+	Password     types.String `tfsdk:"password"`
+	OnInitScript types.String `tfsdk:"on_init_script"`
 
 	Allocated types.String `tfsdk:"allocated"`
 	Deleted   types.String `tfsdk:"deleted"`
@@ -71,6 +72,7 @@ func resourceVirtualMachineGetResponseToVirtualMachineModel(
 	data.Deleted = StringOrNull(response.Deleted)
 	data.Status = types.StringValue(string(response.Status))
 	data.Username = types.StringValue(response.Username)
+	data.OnInitScript = types.StringValue(response.OnInitScript)
 
 	return diag.Diagnostics{}
 }
@@ -157,6 +159,11 @@ func (r *ResourceVirtualMachine) Schema(
 				Sensitive:     true,
 				PlanModifiers: []planmodifier.String{stringplanmodifier.RequiresReplace()},
 			},
+			"on_init_script": schema.StringAttribute{
+				Description:   "script to run on the first boot of the virtual machine",
+				Required:      true,
+				PlanModifiers: []planmodifier.String{stringplanmodifier.RequiresReplace()},
+			},
 		},
 	}
 }
@@ -207,6 +214,7 @@ func (r *ResourceVirtualMachine) Create(
 		plan.DR.ValueBool(),
 		plan.Username.ValueString(),
 		plan.Password.ValueString(),
+		plan.OnInitScript.String(),
 		tags,
 	)
 
