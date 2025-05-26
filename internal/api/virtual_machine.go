@@ -24,6 +24,7 @@ type ResourceVirtualMachineGetResponse struct {
 	Status         string            `json:"status"`
 	Name           string            `json:"name"`
 	Username       string            `json:"username"`
+	OnInitScript   string            `json:"on_init_script"`
 }
 
 type ResourceVirtualMachinePostResponse struct {
@@ -54,6 +55,7 @@ func (api *APIClient) PostVirtualMachine(
 	DR bool,
 	username string,
 	password string,
+	onInitScript string,
 	tags map[string]string,
 ) (*ResourceVirtualMachinePostResponse, error) {
 	resp, err := api.restyClient.R().
@@ -67,6 +69,7 @@ func (api *APIClient) PostVirtualMachine(
 			"dr":               DR,
 			"username":         username,
 			"password":         password,
+			"on_init_script":   onInitScript,
 			"tags":             tags,
 		}).
 		Post(fmt.Sprintf("%s/resource/compute/virtual_machine", api.pathPrefix))

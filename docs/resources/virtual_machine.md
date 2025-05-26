@@ -19,6 +19,7 @@ resource "eci_virtual_machine" "my_virtual_machine" {
   always_on=false
   username="elice"
   password="secretpassword1!"
+  on_init_script="#!/bin/bash\necho 'Hello, Elice!' > /home/elice/hello.txt\nchmod 644 /home/elice/hello.txt"
   dr=false
   tags = {
     "created-by": "terraform"
@@ -35,6 +36,7 @@ resource "eci_virtual_machine" "my_virtual_machine" {
 - `dr` (Boolean) whether to enable DR support
 - `instance_type_id` (String) id of instance type that the virtual machine is created from
 - `name` (String) human-readable name of the virtual machine
+- `on_init_script` (String) script to run on the first boot of the virtual machine
 - `password` (String, Sensitive) password of first user that the virtual machine will generate
 - `tags` (Map of String) User-defined metadata of key-value pairs
 - `username` (String) name of first user that the virtual machine will generate
