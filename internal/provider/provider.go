@@ -64,7 +64,7 @@ func (p *EliceCloudProvider) Schema(
 				Sensitive:   true,
 			},
 			"api_endpoint": schema.StringAttribute{
-				Description: "API endpoint URL (e.g., https://admin.elice.cloud/api/)",
+				Description: "API endpoint URL (e.g., https://portal.elice.cloud/api/)",
 				Required:    true,
 			},
 			"zone_id": schema.StringAttribute{
