@@ -8,7 +8,7 @@ terraform {
 
 provider "eci" {
   api_endpoint = "https://portal.elice.cloud/api"
-  api_access_token = "uIfcvZuf9d6s9q5_hnngnL2Ylqnts1O4lPDFcQzVmBeQ"
+  api_access_token = "ucGKWnD5OfS3PfQ79PR6dHmwRN3Ia18FpcxzIuBM6vX8"
   zone_id="cb67250d-0050-44fa-9872-c8dd7fb9e614"
 }
 
@@ -26,7 +26,7 @@ data "eci_zone" "test_zone" {
 }
 
 data "eci_instance_type" "test_instance_type" {
-  name="tiny"
+  name="M-8"
 }
 
 resource "eci_virtual_machine" "my_virtual_machine" {
@@ -35,6 +35,7 @@ resource "eci_virtual_machine" "my_virtual_machine" {
   always_on=false
   username="elice"
   password="secretpassword1!"
+  on_init_script=""
   dr=false
   tags = {
     "created-by": "terraform"

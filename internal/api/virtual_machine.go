@@ -61,7 +61,7 @@ func (api *APIClient) PostVirtualMachine(
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceVirtualMachinePostResponse{}).
 		SetBody(map[string]interface{}{
-			"zone_id":          api.zoneId,
+			"zone_id":          api.ZoneId,
 			"organization_id":  api.OrganizationId,
 			"instance_type_id": instanceTypeId,
 			"name":             name,

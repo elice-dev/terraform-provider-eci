@@ -42,7 +42,7 @@ func (api *APIClient) PostSubnet(
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceSubnetPostResponse{}).
 		SetBody(map[string]interface{}{
-			"zone_id":             api.zoneId,
+			"zone_id":             api.ZoneId,
 			"organization_id":     api.OrganizationId,
 			"name":                name,
 			"attached_network_id": attachedNetworkId,

@@ -8,7 +8,7 @@ terraform {
 
 provider "eci" {
   api_endpoint = "https://portal.elice.cloud/api"
-  api_access_token = "uIfcvZuf9d6s9q5_hnngnL2Ylqnts1O4lPDFcQzVmBeQ"
+  api_access_token = "ucGKWnD5OfS3PfQ79PR6dHmwRN3Ia18FpcxzIuBM6vX8"
   zone_id="cb67250d-0050-44fa-9872-c8dd7fb9e614"
 }
 
@@ -20,4 +20,8 @@ resource "eci_block_storage_snapshot" "my_block_storage_snapshot" {
   tags = {
     "created-by": "terraform"
   }
+}
+output "block_storage_snapshot_id" {
+  value = eci_block_storage_snapshot.my_block_storage_snapshot.id
+  description = "value of the block storage snapshot id"
 }

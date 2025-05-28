@@ -33,7 +33,7 @@ func (api *APIClient) GetBlockStorageImages(
 	filterNameIlike *string, skip int, count int,
 ) ([]ResourceBlockStorageImageGetResponse, error) {
 	params := map[string]string{
-		"filter_zone_id": api.zoneId,
+		"filter_zone_id": api.ZoneId,
 		"skip":           strconv.FormatInt(int64(skip), 10),
 		"count":          strconv.FormatInt(int64(count), 10),
 	}

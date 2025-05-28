@@ -70,7 +70,7 @@ func (api *APIClient) PostNetworkInterface(
 	tags map[string]string,
 ) (*ResourceNetworkInterfacePostResponse, error) {
 	params := map[string]interface{}{
-		"zone_id":            api.zoneId,
+		"zone_id":            api.ZoneId,
 		"organization_id":    api.OrganizationId,
 		"name":               name,
 		"attached_subnet_id": attachedSubnetId,

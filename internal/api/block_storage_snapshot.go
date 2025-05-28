@@ -45,7 +45,7 @@ func (api *APIClient) PostBlockStorageSnapshot(
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceBlockStoragePostResponse{}).
 		SetBody(map[string]interface{}{
-			"zone_id":          api.zoneId,
+			"zone_id":          api.ZoneId,
 			"organization_id":  api.OrganizationId,
 			"name":             name,
 			"block_storage_id": blockStorageId,
