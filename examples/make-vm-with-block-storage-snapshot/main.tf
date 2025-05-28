@@ -35,7 +35,7 @@ resource "eci_virtual_machine" "my_virtual_machine2" {
   always_on=false
   username="elice"
   password="secretpassword1!"
-  on_init_script=""
+  on_init_script="echo 'Hello World!'"
   dr=false
   tags = {
     "created-by": "terraform"

@@ -214,7 +214,7 @@ func (r *ResourceVirtualMachine) Create(
 		plan.DR.ValueBool(),
 		plan.Username.ValueString(),
 		plan.Password.ValueString(),
-		plan.OnInitScript.String(),
+		plan.OnInitScript.ValueString(),
 		tags,
 	)
 
@@ -427,13 +427,6 @@ func (r *ResourceVirtualMachine) Delete(
 	}
 
 	if len(allocations) > 0 {
-		tflog.Info(
-			ctx,
-			fmt.Sprintf(
-				"virtual machine (%s) has no virtual machine allocation; skipped deleting",
-				id,
-			),
-		)
 		allocation := allocations[0]
 		_, err = r.client.DeleteVirtualMachineAllocation(allocation.Id.String())
 		successMessage, err := isResourceDeleted(err, "resource_allocation", "terminated")
@@ -458,6 +451,14 @@ func (r *ResourceVirtualMachine) Delete(
 		)
 
 	}
+
+	tflog.Info(
+		ctx,
+		fmt.Sprintf(
+			"virtual machine (%s) has no virtual machine allocation; skipped deleting",
+			id,
+		),
+	)
 
 	status, diags := waitStatus(
 		func() (*string, error) {
