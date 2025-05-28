@@ -231,7 +231,31 @@ func (r *ResourceNetworkInterface) Create(
 
 	if !plan.AttachedMachineId.IsNull() {
 		attachedMachineIdPtr := plan.AttachedMachineId.ValueStringPointer()
-		_, err := r.client.PatchNetworkInterface(id, nil, &attachedMachineIdPtr, nil)
+
+		vmResponse, err := r.client.GetVirtualMachine(*attachedMachineIdPtr)
+		if err != nil {
+			addResourceError(
+				&resp.Diagnostics,
+				"failed to get a virtual machine",
+				*attachedMachineIdPtr,
+				err,
+			)
+			return
+		}
+
+		if vmResponse.Status != "idle" {
+			resp.Diagnostics.AddError(
+				"virtual machine is not idle",
+				fmt.Sprintf(
+					"virtual machine (%s) is not idle, status: %s (tip: remove the virtual machine allocation)",
+					*attachedMachineIdPtr,
+					vmResponse.Status,
+				),
+			)
+			return
+		}
+
+		_, err = r.client.PatchNetworkInterface(id, nil, &attachedMachineIdPtr, nil)
 
 		if err != nil {
 			addResourceError(&resp.Diagnostics, "failed to patch network interface", id, err)

@@ -143,6 +143,7 @@ func (r *ResourceBlockStorage) Schema(
 			"image_id": schema.StringAttribute{
 				Description:   "id of image that the block storage will copy from",
 				Optional:      true,
+				Computed:      true,
 				PlanModifiers: []planmodifier.String{stringplanmodifier.RequiresReplace()},
 			},
 			"snapshot_id": schema.StringAttribute{
