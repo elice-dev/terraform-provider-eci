@@ -25,16 +25,16 @@ type InstanceTypeDataSource struct {
 }
 
 type InstanceTypeDataSourceModel struct {
-	Id           types.String  `tfsdk:"id"`
-	Created      types.String  `tfsdk:"created"`
-	ZoneId       types.String  `tfsdk:"zone_id"`
-	Name         types.String  `tfsdk:"name"`
-	Description  types.String  `tfsdk:"description"`
-	CpuVcore     types.Int64   `tfsdk:"cpu_vcore"`
-	MemoryGib    types.Int64   `tfsdk:"memory_gib"`
-	Devices      types.List    `tfsdk:"devices"`
-	PricePerHour types.Float64 `tfsdk:"price_per_hour"`
-	Activated    types.Bool    `tfsdk:"activated"`
+	Id           types.String `tfsdk:"id"`
+	Created      types.String `tfsdk:"created"`
+	ZoneId       types.String `tfsdk:"zone_id"`
+	Name         types.String `tfsdk:"name"`
+	Description  types.String `tfsdk:"description"`
+	CpuVcore     types.Int64  `tfsdk:"cpu_vcore"`
+	MemoryGib    types.Int64  `tfsdk:"memory_gib"`
+	Devices      types.List   `tfsdk:"devices"`
+	PricePerHour types.String `tfsdk:"price_per_hour"`
+	Activated    types.Bool   `tfsdk:"activated"`
 }
 
 func (d *InstanceTypeDataSource) Configure(
@@ -118,7 +118,7 @@ func (d *InstanceTypeDataSource) Schema(
 				Description: "list of devices that a virtual machine will acquire",
 				Computed:    true,
 			},
-			"price_per_hour": schema.Float64Attribute{
+			"price_per_hour": schema.StringAttribute{
 				Description: "price per hour of this instance type",
 				Computed:    true,
 			},
@@ -150,7 +150,7 @@ func InstanceTypeGetResponseToInstanceTypeModel(
 	}
 
 	data.Devices = devices
-	data.PricePerHour = types.Float64Value(response.PricePerHour)
+	data.PricePerHour = types.StringValue(response.PricePerHour)
 	data.Activated = types.BoolValue(response.Activated)
 
 	return diag.Diagnostics{}
