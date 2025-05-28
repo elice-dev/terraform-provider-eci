@@ -35,7 +35,7 @@ func (api *APIClient) GetInstanceTypes(
 	filterNameIlike *string, filterActivated *bool, skip int, count int,
 ) ([]InfraInstanceTypeGetResponse, error) {
 	params := map[string]string{
-		"filter_zone_id": api.zoneId,
+		"filter_zone_id": api.ZoneId,
 		"skip":           strconv.FormatInt(int64(skip), 10),
 		"count":          strconv.FormatInt(int64(count), 10),
 	}

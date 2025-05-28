@@ -57,7 +57,7 @@ func (api *APIClient) PostVirtualNetwork(
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceVirtualNetworkPostResponse{}).
 		SetBody(map[string]interface{}{
-			"zone_id":         api.zoneId,
+			"zone_id":         api.ZoneId,
 			"organization_id": api.OrganizationId,
 			"name":            name,
 			"network_cidr":    networkCidr,

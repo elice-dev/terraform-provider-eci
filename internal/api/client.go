@@ -13,7 +13,7 @@ type APIClient struct {
 	baseURL        string
 	pathPrefix     string
 	OrganizationId string
-	zoneId         string
+	ZoneId         string
 }
 
 var _ error = &APIError{}
@@ -71,7 +71,7 @@ func NewAPIClient(
 		baseURL:        baseURL,
 		pathPrefix:     pathPrefix,
 		OrganizationId: result.Id.String(),
-		zoneId:         zoneId,
+		ZoneId:         zoneId,
 	}, nil
 }
 

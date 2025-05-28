@@ -67,7 +67,7 @@ func (api *APIClient) PostPublicIp(
 	resp, err := api.restyClient.R().
 		SetResult(&ResourcePublicIpPostResponse{}).
 		SetBody(map[string]interface{}{
-			"zone_id":         api.zoneId,
+			"zone_id":         api.ZoneId,
 			"organization_id": api.OrganizationId,
 			"dr":              dr,
 			"tags":            tags,

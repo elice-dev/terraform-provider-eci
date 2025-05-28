@@ -71,7 +71,7 @@ func (api *APIClient) PostVirtualMachineAllocation(
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceVirtualMachineAllocationPostResponse{}).
 		SetBody(map[string]interface{}{
-			"zone_id":         api.zoneId,
+			"zone_id":         api.ZoneId,
 			"organization_id": api.OrganizationId,
 			"machine_id":      machineId,
 			"tags":            tags,

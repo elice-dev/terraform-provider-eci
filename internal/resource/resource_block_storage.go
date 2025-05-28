@@ -231,9 +231,14 @@ func (r *ResourceBlockStorage) Create(
 		return
 	}
 
+	var imageIdPtr *string = nil
+	if !plan.ImageId.IsUnknown() {
+		imageIdPtr = plan.ImageId.ValueStringPointer()
+	}
+
 	response, err := r.client.PostBlockStorage(
 		plan.Name.ValueString(),
-		plan.ImageId.ValueStringPointer(),
+		imageIdPtr,
 		plan.SnapshotId.ValueStringPointer(),
 		int(plan.SizeGib.ValueInt64()),
 		plan.DR.ValueBool(),
