@@ -339,7 +339,7 @@ func (r *ResourceVirtualMachineAllocation) Delete(
 		return
 	}
 
-	if deleteResponse.Status == "terminated" {
+	if deleteResponse != nil && deleteResponse.Status == "terminated" {
 		tflog.Info(ctx, fmt.Sprintf("%s (id: %s)", successMessage, id))
 		return
 	}
