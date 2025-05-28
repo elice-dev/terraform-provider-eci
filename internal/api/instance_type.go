@@ -19,7 +19,7 @@ type InfraInstanceTypeGetResponse struct {
 	CpuVcore     int               `json:"cpu_vcore"`
 	MemoryGib    int               `json:"memory_gib"`
 	Devices      []string          `json:"devices"`
-	PricePerHour float64           `json:"price_per_hour"`
+	PricePerHour string            `json:"price_per_hour"`
 	Activated    bool              `json:"activated"`
 }
 

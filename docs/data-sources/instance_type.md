@@ -34,5 +34,5 @@ data "eci_instance_type" "test_instance_type" {
 - `devices` (List of String) list of devices that a virtual machine will acquire
 - `id` (String) unique identifier of the instance type
 - `memory_gib` (Number) size of memory (GiB) that a virtual machine will acquire
-- `price_per_hour` (Number) price per hour of this instance type
+- `price_per_hour` (String) price per hour of this instance type
 - `zone_id` (String) id of zone that the instance type belongs to
