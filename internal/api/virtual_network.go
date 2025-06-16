@@ -8,12 +8,13 @@ import (
 )
 
 type NetworkFirewallRule struct {
-	Proto       string `json:"proto"       tfsdk:"proto"`
-	Source      string `json:"source"      tfsdk:"source"`
-	Destination string `json:"destination" tfsdk:"destination"`
-	Port        int    `json:"port"        tfsdk:"port"`
-	Action      string `json:"action"      tfsdk:"action"`
-	Comment     string `json:"comment"     tfsdk:"comment"`
+	Proto       string `json:"proto"              tfsdk:"proto"`
+	Source      string `json:"source"             tfsdk:"source"`
+	Destination string `json:"destination"        tfsdk:"destination"`
+	Port        *int   `json:"port,omitempty"     tfsdk:"port"`
+	PortEnd     *int   `json:"port_end,omitempty" tfsdk:"port_end"`
+	Action      string `json:"action"             tfsdk:"action"`
+	Comment     string `json:"comment"            tfsdk:"comment"`
 }
 
 type ResourceVirtualNetworkGetResponse struct {

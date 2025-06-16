@@ -8,20 +8,20 @@ terraform {
 
 provider "eci" {
   api_endpoint = "https://portal.elice.cloud/api"
-  api_access_token = "ucGKWnD5OfS3PfQ79PR6dHmwRN3Ia18FpcxzIuBM6vX8"
+  api_access_token = "ucGKWnD5OfS3PfQ79PR6dHmwRN3Ia18FpcxzIuBM6vX8" // replace it with your user access token
   zone_id="cb67250d-0050-44fa-9872-c8dd7fb9e614"
 }
 
 data "eci_block_storage_image" "ubuntu2204" {
-  name="Ubuntu 22.04"
+  name="Ubuntu 22.04 LTS (20250116)"
 }
 
 data "eci_region" "test_region" {
-  name="Test-Region"
+  name="central-01"
 }
 
 data "eci_zone" "test_zone" {
-  name="Test-Zone"
+  name="central-01-a"
   region_id="${data.eci_region.test_region.id}"
 }
 
@@ -69,7 +69,17 @@ resource "eci_block_storage" "my_block_storage" {
 resource "eci_virtual_network" "my_virtual_network" {
   name="terraform-test-virtual-network_ii"
   network_cidr="192.168.0.0/16"
-  firewall_rules= []
+  firewall_rules= [
+    {
+      "proto": "ALL",
+      "source": "0.0.0.0/0",
+      "destination": "0.0.0.0/0",
+      "port": 0,
+      "port_end": 65535,
+      "action": "ACCEPT",
+      "comment": "sample network rule"
+    }
+  ]
   tags = {
     "created-by": "terraform"
   }
@@ -105,7 +115,7 @@ resource "eci_network_interface" "my_network_interface_two" {
   }
 }
 
-/*
+
 resource "eci_public_ip" "my_public_ip" {
   attached_network_interface_id=(
     "${eci_network_interface.my_network_interface_one.id}"
@@ -125,4 +135,3 @@ output "instance_public_ip_dr_addr_1" {
   value = "${eci_public_ip.my_public_ip.dr_ip}"
   description = "The public IP address of the virtual machine (DR)"
 }
-*/

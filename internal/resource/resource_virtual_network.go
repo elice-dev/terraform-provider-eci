@@ -38,6 +38,7 @@ type FirewallRuleModel struct {
 	Source      types.String `tfsdk:"source"`
 	Destination types.String `tfsdk:"destination"`
 	Port        types.Int64  `tfsdk:"port"`
+	PortEnd     types.Int64  `tfsdk:"port_end"`
 	Action      types.String `tfsdk:"action"`
 	Comment     types.String `tfsdk:"comment"`
 }
@@ -76,6 +77,7 @@ func resourceVirtualNetworkGetResponseToVirtualNetworkModel(
 			"source":      types.StringType,
 			"destination": types.StringType,
 			"port":        types.Int64Type,
+			"port_end":    types.Int64Type,
 			"action":      types.StringType,
 			"comment":     types.StringType,
 		},
@@ -183,7 +185,14 @@ func (r *ResourceVirtualNetwork) Schema(
 						"source":      schema.StringAttribute{Required: true},
 						"destination": schema.StringAttribute{Required: true},
 						"port": schema.Int64Attribute{
-							Required: true,
+							Optional: true,
+							Validators: []validator.Int64{
+								int64validator.AtLeast(0),
+								int64validator.AtMost(65535),
+							},
+						},
+						"port_end": schema.Int64Attribute{
+							Optional: true,
 							Validators: []validator.Int64{
 								int64validator.AtLeast(0),
 								int64validator.AtMost(65535),
@@ -198,6 +207,9 @@ func (r *ResourceVirtualNetwork) Schema(
 						"comment": schema.StringAttribute{
 							Description: "human-readable comment of the firewall rule",
 							Required:    true,
+							Validators: []validator.String{
+								stringvalidator.LengthAtMost(256),
+							},
 						},
 					},
 				},

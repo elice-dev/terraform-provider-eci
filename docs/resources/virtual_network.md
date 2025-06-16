@@ -54,6 +54,10 @@ Required:
 - `action` (String)
 - `comment` (String) human-readable comment of the firewall rule
 - `destination` (String)
-- `port` (Number)
 - `proto` (String)
 - `source` (String)
+
+Optional:
+
+- `port` (Number)
+- `port_end` (Number)
