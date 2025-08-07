@@ -51,7 +51,7 @@ func (api *APIClient) PostBlockStorageSnapshot(
 			"block_storage_id": blockStorageId,
 			"tags":             tags,
 		}).
-		Post(fmt.Sprintf("%s/resource/storage/block_storage/snapshot", api.pathPrefix))
+		Post(fmt.Sprintf("%s/user/resource/storage/block_storage/snapshot", api.pathPrefix))
 
 	return handleAPIResponse[ResourceBlockStoragePostResponse](resp, err)
 }
@@ -61,7 +61,7 @@ func (api *APIClient) GetBlockStorageSnapshot(
 ) (*ResourceBlockStorageSnapshotGetResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceBlockStorageSnapshotGetResponse{}).
-		Get(fmt.Sprintf("%s/resource/storage/block_storage/snapshot/%s", api.pathPrefix, id))
+		Get(fmt.Sprintf("%s/user/resource/storage/block_storage/snapshot/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceBlockStorageSnapshotGetResponse](resp, err)
 }
@@ -95,7 +95,7 @@ func (api *APIClient) GetBlockStorageSnapshots(
 	resp, err := api.restyClient.R().
 		SetResult(&[]ResourceBlockStorageSnapshotGetResponse{}).
 		SetQueryParams(params).
-		Get(fmt.Sprintf("%s/resource/storage/block_storage/snapshot", api.pathPrefix))
+		Get(fmt.Sprintf("%s/user/resource/storage/block_storage/snapshot", api.pathPrefix))
 
 	return handleListAPIResponse[ResourceBlockStorageSnapshotGetResponse](resp, err)
 }
@@ -110,7 +110,7 @@ func (api *APIClient) PatchBlockStorageSnapshot(
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceBlockStoragePatchResponse{}).
 		SetBody(params).
-		Patch(fmt.Sprintf("%s/resource/storage/block_storage/snapshot/%s", api.pathPrefix, id))
+		Patch(fmt.Sprintf("%s/user/resource/storage/block_storage/snapshot/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceBlockStoragePatchResponse](resp, err)
 }
@@ -120,7 +120,7 @@ func (api *APIClient) DeleteBlockStorageSnapshot(
 ) (*ResourceBlockStorageDeleteResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceBlockStorageDeleteResponse{}).
-		Delete(fmt.Sprintf("%s/resource/storage/block_storage/snapshot/%s", api.pathPrefix, id))
+		Delete(fmt.Sprintf("%s/user/resource/storage/block_storage/snapshot/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceBlockStorageDeleteResponse](resp, err)
 }

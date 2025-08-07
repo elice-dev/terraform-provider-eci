@@ -42,7 +42,7 @@ func (api *APIClient) GetNetworkInterface(
 ) (*ResourceNetworkInterfaceGetResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceNetworkInterfaceGetResponse{}).
-		Get(fmt.Sprintf("%s/resource/network/network_interface/%s", api.pathPrefix, id))
+		Get(fmt.Sprintf("%s/user/resource/network/network_interface/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceNetworkInterfaceGetResponse](resp, err)
 }
@@ -56,7 +56,7 @@ func (api *APIClient) GetNetworkInterfaces(
 	resp, err := api.restyClient.R().
 		SetResult(&[]ResourceNetworkInterfaceGetResponse{}).
 		SetQueryParams(params).
-		Get(fmt.Sprintf("%s/resource/network/network_interface", api.pathPrefix))
+		Get(fmt.Sprintf("%s/user/resource/network/network_interface", api.pathPrefix))
 
 	return handleListAPIResponse[ResourceNetworkInterfaceGetResponse](resp, err)
 }
@@ -83,7 +83,7 @@ func (api *APIClient) PostNetworkInterface(
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceNetworkInterfacePostResponse{}).
 		SetBody(params).
-		Post(fmt.Sprintf("%s/resource/network/network_interface", api.pathPrefix))
+		Post(fmt.Sprintf("%s/user/resource/network/network_interface", api.pathPrefix))
 
 	return handleAPIResponse[ResourceNetworkInterfacePostResponse](resp, err)
 }
@@ -99,7 +99,7 @@ func (api *APIClient) PatchNetworkInterface(
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceNetworkInterfacePatchResponse{}).
 		SetBody(params).
-		Patch(fmt.Sprintf("%s/resource/network/network_interface/%s", api.pathPrefix, id))
+		Patch(fmt.Sprintf("%s/user/resource/network/network_interface/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceNetworkInterfacePatchResponse](resp, err)
 }
@@ -109,7 +109,7 @@ func (api *APIClient) DeleteNetworkInterface(
 ) (*ResourceNetworkInterfaceDeleteResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceNetworkInterfaceDeleteResponse{}).
-		Delete(fmt.Sprintf("%s/resource/network/network_interface/%s", api.pathPrefix, id))
+		Delete(fmt.Sprintf("%s/user/resource/network/network_interface/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceNetworkInterfaceDeleteResponse](resp, err)
 }

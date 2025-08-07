@@ -50,7 +50,7 @@ func (api *APIClient) PostSubnet(
 			"network_gw":          networkGw,
 			"tags":                tags,
 		}).
-		Post(fmt.Sprintf("%s/resource/network/subnet", api.pathPrefix))
+		Post(fmt.Sprintf("%s/user/resource/network/subnet", api.pathPrefix))
 
 	return handleAPIResponse[ResourceSubnetPostResponse](resp, err)
 }
@@ -58,7 +58,7 @@ func (api *APIClient) PostSubnet(
 func (api *APIClient) GetSubnet(id string) (*ResourceSubnetGetResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceSubnetGetResponse{}).
-		Get(fmt.Sprintf("%s/resource/network/subnet/%s", api.pathPrefix, id))
+		Get(fmt.Sprintf("%s/user/resource/network/subnet/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceSubnetGetResponse](resp, err)
 }
@@ -73,7 +73,7 @@ func (api *APIClient) PatchSubnet(
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceSubnetPatchResponse{}).
 		SetBody(params).
-		Patch(fmt.Sprintf("%s/resource/network/subnet/%s", api.pathPrefix, id))
+		Patch(fmt.Sprintf("%s/user/resource/network/subnet/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceSubnetPatchResponse](resp, err)
 }
@@ -81,7 +81,7 @@ func (api *APIClient) PatchSubnet(
 func (api *APIClient) DeleteSubnet(id string) (*ResourceSubnetDeleteResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceSubnetDeleteResponse{}).
-		Delete(fmt.Sprintf("%s/resource/network/subnet/%s", api.pathPrefix, id))
+		Delete(fmt.Sprintf("%s/user/resource/network/subnet/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceSubnetDeleteResponse](resp, err)
 }

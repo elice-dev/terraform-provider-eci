@@ -60,7 +60,7 @@ func (api *APIClient) PostBlockStorage(
 			"dr":              dr,
 			"tags":            tags,
 		}).
-		Post(fmt.Sprintf("%s/resource/storage/block_storage", api.pathPrefix))
+		Post(fmt.Sprintf("%s/user/resource/storage/block_storage", api.pathPrefix))
 
 	return handleAPIResponse[ResourceBlockStoragePostResponse](resp, err)
 }
@@ -68,7 +68,7 @@ func (api *APIClient) PostBlockStorage(
 func (api *APIClient) GetBlockStorage(id string) (*ResourceBlockStorageGetResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceBlockStorageGetResponse{}).
-		Get(fmt.Sprintf("%s/resource/storage/block_storage/%s", api.pathPrefix, id))
+		Get(fmt.Sprintf("%s/user/resource/storage/block_storage/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceBlockStorageGetResponse](resp, err)
 }
@@ -82,7 +82,7 @@ func (api *APIClient) GetBlockStorages(
 	resp, err := api.restyClient.R().
 		SetResult(&[]ResourceBlockStorageGetResponse{}).
 		SetQueryParams(params).
-		Get(fmt.Sprintf("%s/resource/storage/block_storage", api.pathPrefix))
+		Get(fmt.Sprintf("%s/user/resource/storage/block_storage", api.pathPrefix))
 
 	return handleListAPIResponse[ResourceBlockStorageGetResponse](resp, err)
 }
@@ -105,7 +105,7 @@ func (api *APIClient) PatchBlockStorage(
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceBlockStoragePatchResponse{}).
 		SetBody(params).
-		Patch(fmt.Sprintf("%s/resource/storage/block_storage/%s", api.pathPrefix, id))
+		Patch(fmt.Sprintf("%s/user/resource/storage/block_storage/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceBlockStoragePatchResponse](resp, err)
 }
@@ -113,7 +113,7 @@ func (api *APIClient) PatchBlockStorage(
 func (api *APIClient) DeleteBlockStorage(id string) (*ResourceBlockStorageDeleteResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceBlockStorageDeleteResponse{}).
-		Delete(fmt.Sprintf("%s/resource/storage/block_storage/%s", api.pathPrefix, id))
+		Delete(fmt.Sprintf("%s/user/resource/storage/block_storage/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceBlockStorageDeleteResponse](resp, err)
 }
