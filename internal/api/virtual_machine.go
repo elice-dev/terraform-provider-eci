@@ -43,7 +43,7 @@ type ResourceVirtualMachineDeleteResponse struct {
 func (api *APIClient) GetVirtualMachine(id string) (*ResourceVirtualMachineGetResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceVirtualMachineGetResponse{}).
-		Get(fmt.Sprintf("%s/resource/compute/virtual_machine/%s", api.pathPrefix, id))
+		Get(fmt.Sprintf("%s/user/resource/compute/virtual_machine/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceVirtualMachineGetResponse](resp, err)
 }
@@ -72,7 +72,7 @@ func (api *APIClient) PostVirtualMachine(
 			"on_init_script":   onInitScript,
 			"tags":             tags,
 		}).
-		Post(fmt.Sprintf("%s/resource/compute/virtual_machine", api.pathPrefix))
+		Post(fmt.Sprintf("%s/user/resource/compute/virtual_machine", api.pathPrefix))
 
 	return handleAPIResponse[ResourceVirtualMachinePostResponse](resp, err)
 }
@@ -93,7 +93,7 @@ func (api *APIClient) PatchVirtualMachine(
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceVirtualMachinePatchResponse{}).
 		SetBody(params).
-		Patch(fmt.Sprintf("%s/resource/compute/virtual_machine/%s", api.pathPrefix, id))
+		Patch(fmt.Sprintf("%s/user/resource/compute/virtual_machine/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceVirtualMachinePatchResponse](resp, err)
 }
@@ -103,7 +103,7 @@ func (api *APIClient) DeleteVirtualMachine(
 ) (*ResourceVirtualMachineDeleteResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceVirtualMachineDeleteResponse{}).
-		Delete(fmt.Sprintf("%s/resource/compute/virtual_machine/%s", api.pathPrefix, id))
+		Delete(fmt.Sprintf("%s/user/resource/compute/virtual_machine/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceVirtualMachineDeleteResponse](resp, err)
 }

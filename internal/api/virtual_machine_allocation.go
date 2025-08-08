@@ -45,7 +45,7 @@ func (api *APIClient) GetVirtualMachineAllocation(
 ) (*ResourceVirtualMachineAllocationGetResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceVirtualMachineAllocationGetResponse{}).
-		Get(fmt.Sprintf("%s/resource/compute/virtual_machine_allocation/%s", api.pathPrefix, id))
+		Get(fmt.Sprintf("%s/user/resource/compute/virtual_machine_allocation/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceVirtualMachineAllocationGetResponse](resp, err)
 }
@@ -60,7 +60,7 @@ func (api *APIClient) GetVirtualMachineAllocations(
 	resp, err := api.restyClient.R().
 		SetResult(&[]ResourceVirtualMachineAllocationGetResponse{}).
 		SetQueryParams(params).
-		Get(fmt.Sprintf("%s/resource/compute/virtual_machine_allocation", api.pathPrefix))
+		Get(fmt.Sprintf("%s/user/resource/compute/virtual_machine_allocation", api.pathPrefix))
 
 	return handleListAPIResponse[ResourceVirtualMachineAllocationGetResponse](resp, err)
 }
@@ -76,7 +76,7 @@ func (api *APIClient) PostVirtualMachineAllocation(
 			"machine_id":      machineId,
 			"tags":            tags,
 		}).
-		Post(fmt.Sprintf("%s/resource/compute/virtual_machine_allocation", api.pathPrefix))
+		Post(fmt.Sprintf("%s/user/resource/compute/virtual_machine_allocation", api.pathPrefix))
 
 	return handleAPIResponse[ResourceVirtualMachineAllocationPostResponse](resp, err)
 }
@@ -85,7 +85,7 @@ func (api *APIClient) DeleteVirtualMachineAllocation(id string,
 ) (*ResourceVirtualMachineAllocationDeleteResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceVirtualMachineAllocationDeleteResponse{}).
-		Delete(fmt.Sprintf("%s/resource/compute/virtual_machine_allocation/%s", api.pathPrefix, id))
+		Delete(fmt.Sprintf("%s/user/resource/compute/virtual_machine_allocation/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceVirtualMachineAllocationDeleteResponse](resp, err)
 }

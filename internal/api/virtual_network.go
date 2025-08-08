@@ -47,7 +47,7 @@ type ResourceVirtualNetworkDeleteResponse struct {
 func (api *APIClient) GetVirtualNetwork(id string) (*ResourceVirtualNetworkGetResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceVirtualNetworkGetResponse{}).
-		Get(fmt.Sprintf("%s/resource/network/virtual_network/%s", api.pathPrefix, id))
+		Get(fmt.Sprintf("%s/user/resource/network/virtual_network/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceVirtualNetworkGetResponse](resp, err)
 }
@@ -64,7 +64,7 @@ func (api *APIClient) PostVirtualNetwork(
 			"network_cidr":    networkCidr,
 			"tags":            tags,
 		}).
-		Post(fmt.Sprintf("%s/resource/network/virtual_network", api.pathPrefix))
+		Post(fmt.Sprintf("%s/user/resource/network/virtual_network", api.pathPrefix))
 
 	return handleAPIResponse[ResourceVirtualNetworkPostResponse](resp, err)
 }
@@ -80,7 +80,7 @@ func (api *APIClient) PatchVirtualNetwork(
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceVirtualNetworkPatchResponse{}).
 		SetBody(params).
-		Patch(fmt.Sprintf("%s/resource/network/virtual_network/%s", api.pathPrefix, id))
+		Patch(fmt.Sprintf("%s/user/resource/network/virtual_network/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceVirtualNetworkPatchResponse](resp, err)
 }
@@ -90,7 +90,7 @@ func (api *APIClient) DeleteVirtualNetwork(
 ) (*ResourceVirtualNetworkDeleteResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourceVirtualNetworkDeleteResponse{}).
-		Delete(fmt.Sprintf("%s/resource/network/virtual_network/%s", api.pathPrefix, id))
+		Delete(fmt.Sprintf("%s/user/resource/network/virtual_network/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourceVirtualNetworkDeleteResponse](resp, err)
 }

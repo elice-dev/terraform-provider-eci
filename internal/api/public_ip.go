@@ -40,7 +40,7 @@ type ResourcePublicIpDeleteResponse struct {
 func (api *APIClient) GetPublicIp(id string) (*ResourcePublicIpGetResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourcePublicIpGetResponse{}).
-		Get(fmt.Sprintf("%s/resource/network/public_ip/%s", api.pathPrefix, id))
+		Get(fmt.Sprintf("%s/user/resource/network/public_ip/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourcePublicIpGetResponse](resp, err)
 }
@@ -56,7 +56,7 @@ func (api *APIClient) GetPublicIps(
 	resp, err := api.restyClient.R().
 		SetResult(&[]ResourcePublicIpGetResponse{}).
 		SetQueryParams(params).
-		Get(fmt.Sprintf("%s/resource/network/public_ip", api.pathPrefix))
+		Get(fmt.Sprintf("%s/user/resource/network/public_ip", api.pathPrefix))
 
 	return handleListAPIResponse[ResourcePublicIpGetResponse](resp, err)
 }
@@ -72,7 +72,7 @@ func (api *APIClient) PostPublicIp(
 			"dr":              dr,
 			"tags":            tags,
 		}).
-		Post(fmt.Sprintf("%s/resource/network/public_ip", api.pathPrefix))
+		Post(fmt.Sprintf("%s/user/resource/network/public_ip", api.pathPrefix))
 
 	return handleAPIResponse[ResourcePublicIpPostResponse](resp, err)
 }
@@ -87,7 +87,7 @@ func (api *APIClient) PatchPublicIp(
 	resp, err := api.restyClient.R().
 		SetResult(&ResourcePublicIpPatchResponse{}).
 		SetBody(params).
-		Patch(fmt.Sprintf("%s/resource/network/public_ip/%s", api.pathPrefix, id))
+		Patch(fmt.Sprintf("%s/user/resource/network/public_ip/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourcePublicIpPatchResponse](resp, err)
 }
@@ -95,7 +95,7 @@ func (api *APIClient) PatchPublicIp(
 func (api *APIClient) DeletePublicIp(id string) (*ResourcePublicIpDeleteResponse, error) {
 	resp, err := api.restyClient.R().
 		SetResult(&ResourcePublicIpDeleteResponse{}).
-		Delete(fmt.Sprintf("%s/resource/network/public_ip/%s", api.pathPrefix, id))
+		Delete(fmt.Sprintf("%s/user/resource/network/public_ip/%s", api.pathPrefix, id))
 
 	return handleAPIResponse[ResourcePublicIpDeleteResponse](resp, err)
 }
