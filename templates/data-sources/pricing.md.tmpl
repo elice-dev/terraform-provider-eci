@@ -1,0 +1,16 @@
+---
+page_title: "eci_pricing Data Source - eci"
+subcategory: ""
+description: |-
+  Provides information about an ECI pricing plan.
+---
+
+# eci_pricing (Data Source)
+
+Provides information about an ECI pricing plan. Each resource type (VM, block storage, public IP) has its own pricing plans.
+
+## Example Usage
+
+{{ tffile "examples/data-sources/eci_pricing/data-source.tf" }}
+
+{{ .SchemaMarkdown | trimspace }}

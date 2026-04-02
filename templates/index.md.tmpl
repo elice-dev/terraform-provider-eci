@@ -1,0 +1,156 @@
+---
+page_title: "eci Provider"
+subcategory: ""
+description: |-
+  Elice Cloud Infrastructure (ECI) Terraform Provider
+---
+
+# eci Provider
+
+The ECI provider allows you to manage [Elice Cloud Infrastructure](https://elice.cloud) resources using Terraform.
+
+## Resource Architecture
+
+ECI resources have the following relationship:
+
+```
+eci_virtual_machine          (VM spec: name, instance type, pricing)
+├── eci_block_storage        (disk: boot disk, data disk)
+├── eci_virtual_network      (network: CIDR, firewall rules)
+│   └── eci_subnet           (subnet: gateway, purpose)
+│       └── eci_network_interface  (NIC: attached to VM and subnet)
+│           └── eci_public_ip      (public IP: attached to NIC)
+└── eci_virtual_machine_allocation (execution: starts/stops the VM)
+```
+
+- `eci_virtual_machine` defines the VM spec but does **not** start it.
+- `eci_virtual_machine_allocation` starts the VM. Removing it stops the VM without deleting it.
+
+## Example Usage
+
+{{ tffile "examples/provider/provider.tf" }}
+
+-> Set the token via environment variable: `export TF_VAR_eci_api_token="your-token"` or a `.tfvars` file (gitignored).
+
+## Full Example: Create and Start a VM
+
+```terraform
+# Data sources
+data "eci_block_storage_image" "ubuntu" {
+  name = "Ubuntu 22.04 LTS (20250116)"
+}
+
+data "eci_instance_type" "standard" {
+  name = "C-2"
+}
+
+data "eci_pricing" "vm" {
+  name         = "C-2"
+  pricing_type = "ondemand"
+}
+
+data "eci_pricing" "storage" {
+  name         = "Block Storage"
+  pricing_type = "ondemand"
+}
+
+data "eci_pricing" "ip" {
+  name         = "Public IP"
+  pricing_type = "ondemand"
+}
+
+variable "vm_password" {
+  description = "Password for the VM user"
+  type        = string
+  sensitive   = true
+}
+
+# VM (spec only, not started yet)
+resource "eci_virtual_machine" "my_vm" {
+  name             = "my-vm"
+  instance_type_id = data.eci_instance_type.standard.id
+  pricing_id       = data.eci_pricing.vm.id
+  always_on        = false
+  username         = "elice"
+  password         = var.vm_password
+  on_init_script   = ""
+  dr               = false
+  tags = { "created-by" = "terraform" }
+}
+
+# Boot disk
+resource "eci_block_storage" "boot_disk" {
+  name                = "my-boot-disk"
+  attached_machine_id = eci_virtual_machine.my_vm.id
+  pricing_id          = data.eci_pricing.storage.id
+  image_id            = data.eci_block_storage_image.ubuntu.id
+  size_gib            = 40
+  dr                  = false
+  tags = { "created-by" = "terraform" }
+}
+
+# Network
+resource "eci_virtual_network" "my_network" {
+  name         = "my-network"
+  network_cidr = "192.168.0.0/16"
+  firewall_rules = [{
+    proto       = "ALL"
+    source      = "0.0.0.0/0"
+    destination = "0.0.0.0/0"
+    port        = 0
+    port_end    = 65535
+    action      = "ACCEPT"
+    comment     = "Allow all"
+  }]
+  tags = { "created-by" = "terraform" }
+}
+
+resource "eci_subnet" "my_subnet" {
+  name                = "my-subnet"
+  attached_network_id = eci_virtual_network.my_network.id
+  purpose             = "virtual_machine"
+  network_gw          = "192.168.0.1/24"
+  tags = { "created-by" = "terraform" }
+}
+
+resource "eci_network_interface" "my_nic" {
+  name                = "my-nic"
+  attached_subnet_id  = eci_subnet.my_subnet.id
+  attached_machine_id = eci_virtual_machine.my_vm.id
+  dr                  = false
+  tags = { "created-by" = "terraform" }
+}
+
+resource "eci_public_ip" "my_ip" {
+  attached_network_interface_id = eci_network_interface.my_nic.id
+  pricing_id                    = data.eci_pricing.ip.id
+  dr                            = false
+  tags = { "created-by" = "terraform" }
+}
+
+# Start the VM
+variable "vm_running" {
+  description = "Set to false to stop the VM without deleting it"
+  default     = true
+}
+
+resource "eci_virtual_machine_allocation" "my_vm_alloc" {
+  count      = var.vm_running ? 1 : 0
+  machine_id = eci_virtual_machine.my_vm.id
+  tags = { "created-by" = "terraform" }
+  depends_on = [
+    eci_block_storage.boot_disk,
+    eci_network_interface.my_nic,
+    eci_public_ip.my_ip
+  ]
+}
+```
+
+```bash
+terraform apply                          # Create all + start VM
+terraform apply -var="vm_running=false"  # Stop VM (keep infrastructure)
+terraform apply -var="vm_running=true"   # Start VM again
+terraform destroy                        # Delete everything
+```
+
+{{ .SchemaMarkdown | trimspace }}

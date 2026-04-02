@@ -1,0 +1,18 @@
+---
+page_title: "eci_block_storage Resource - eci"
+subcategory: ""
+description: |-
+  Manages an ECI block storage volume.
+---
+
+# eci_block_storage (Resource)
+
+Manages an ECI block storage volume. Block storage can be used as a boot disk (with `image_id`) or a data disk attached to a virtual machine.
+
+-> **NOTE:** A VM requires at least one block storage with `image_id` set as its boot disk before it can be started via `eci_virtual_machine_allocation`.
+
+## Example Usage
+
+{{ tffile "examples/resources/eci_block_storage/resource.tf" }}
+
+{{ .SchemaMarkdown | trimspace }}

@@ -1,4 +1,8 @@
-data "eci_zone" "zone_test" {
-  name="Test-Zone"
-  region_id="02d41f09-6efa-487c-81a5-f40c9ac996c5"
+data "eci_region" "central" {
+  name = "central-01"
+}
+
+data "eci_zone" "zone_a" {
+  name      = "central-01-a"
+  region_id = data.eci_region.central.id
 }

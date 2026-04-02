@@ -1,0 +1,20 @@
+---
+page_title: "eci_virtual_machine Resource - eci"
+subcategory: ""
+description: |-
+  Manages an ECI virtual machine.
+---
+
+# eci_virtual_machine (Resource)
+
+Manages an ECI virtual machine. Creating this resource defines the VM spec (name, instance type, pricing, credentials) but does **not** start the VM.
+
+-> **NOTE:** To start the VM, create an [`eci_virtual_machine_allocation`](virtual_machine_allocation) resource that references it. Before starting, ensure a boot disk ([`eci_block_storage`](block_storage) with `image_id`) and a network interface ([`eci_network_interface`](network_interface)) are attached.
+
+## Example Usage
+
+{{ tffile "examples/resources/eci_virtual_machine/resource.tf" }}
+
+~> **NOTE:** The `password` argument is stored in Terraform state as plain-text. Use a sensitive variable and secure your state file.
+
+{{ .SchemaMarkdown | trimspace }}

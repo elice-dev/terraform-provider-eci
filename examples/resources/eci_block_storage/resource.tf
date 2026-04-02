@@ -1,16 +1,20 @@
-data "eci_pricing" "storage_pricing" {
+data "eci_block_storage_image" "ubuntu" {
+  name = "Ubuntu 22.04 LTS (20250116)"
+}
+
+data "eci_pricing" "storage" {
   name         = "Block Storage"
   pricing_type = "ondemand"
 }
 
-resource "eci_block_storage" "my_block_storage" {
-  attached_machine_id="4f3a9eeb-962f-4f9c-9074-13c422b3d726"
-  name="my-block-strage"
-  dr=false
-  size_gib=40
-  pricing_id="${data.eci_pricing.storage_pricing.id}"
-  image_id="4f3a9eeb-962f-4f9c-9074-13c422b3d726"
+resource "eci_block_storage" "boot_disk" {
+  name                = "my-boot-disk"
+  attached_machine_id = eci_virtual_machine.my_vm.id
+  pricing_id          = data.eci_pricing.storage.id
+  image_id            = data.eci_block_storage_image.ubuntu.id
+  size_gib            = 40
+  dr                  = false
   tags = {
-    "created-by": "terraform"
+    "created-by" = "terraform"
   }
 }

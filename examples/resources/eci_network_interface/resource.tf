@@ -1,9 +1,9 @@
-resource "eci_network_interface" "my_network_interface" {
-  attached_subnet_id="79169e74-7c87-4fa6-8ef4-3d4446dbeb50"
-  attached_machine_id="02d41f09-6efa-487c-81a5-f40c9ac996c5"
-  name="terraform-network-interace-1"
-  dr=false
+resource "eci_network_interface" "my_nic" {
+  name                = "my-nic"
+  attached_subnet_id  = eci_subnet.my_subnet.id
+  attached_machine_id = eci_virtual_machine.my_vm.id
+  dr                  = false
   tags = {
-    "created-by": "terraform"
+    "created-by" = "terraform"
   }
 }
