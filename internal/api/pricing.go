@@ -7,23 +7,29 @@ import (
 	"github.com/google/uuid"
 )
 
+type PricingAmount struct {
+	PerHour       string `json:"per_hour"        tfsdk:"per_hour"`
+	ListedPerHour string `json:"listed_per_hour" tfsdk:"listed_per_hour"`
+}
+
 type PricingGetResponse struct {
-	Id                 uuid.UUID         `json:"id"`
-	Tags               map[string]string `json:"tags"`
-	Created            time.Time         `json:"created"`
-	Modified           *time.Time        `json:"modified,omitempty"`
-	OrganizationId     *uuid.UUID        `json:"organization_id,omitempty"`
-	ZoneId             uuid.UUID         `json:"zone_id"`
-	ResourceKind       string            `json:"resource_kind"`
-	ResourceId         *uuid.UUID        `json:"resource_id,omitempty"`
-	Name               string            `json:"name"`
-	PricingType        string            `json:"pricing_type"`
-	PricePerHour       string            `json:"price_per_hour"`
-	ListedPricePerHour string            `json:"listed_price_per_hour"`
-	Start              *time.Time        `json:"start,omitempty"`
-	End                *time.Time        `json:"end,omitempty"`
-	Activated          bool              `json:"activated"`
-	Quota              *int              `json:"quota,omitempty"`
+	Id                 uuid.UUID                `json:"id"`
+	Tags               map[string]string        `json:"tags"`
+	Created            time.Time                `json:"created"`
+	Modified           *time.Time               `json:"modified,omitempty"`
+	OrganizationId     *uuid.UUID               `json:"organization_id,omitempty"`
+	ZoneId             uuid.UUID                `json:"zone_id"`
+	ResourceKind       string                   `json:"resource_kind"`
+	ResourceId         *uuid.UUID               `json:"resource_id,omitempty"`
+	Name               string                   `json:"name"`
+	PricingType        string                   `json:"pricing_type"`
+	PricePerHour       string                   `json:"price_per_hour"`
+	ListedPricePerHour string                   `json:"listed_price_per_hour"`
+	Amount             map[string]PricingAmount `json:"amount,omitempty"`
+	Start              *time.Time               `json:"start,omitempty"`
+	End                *time.Time               `json:"end,omitempty"`
+	Activated          bool                     `json:"activated"`
+	Quota              *int                     `json:"quota,omitempty"`
 }
 
 func (api *APIClient) GetPricings(

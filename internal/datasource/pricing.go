@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"terraform-provider-eci/internal/api"
 
+	"github.com/hashicorp/terraform-plugin-framework/attr"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
@@ -37,6 +38,7 @@ type PricingDataSourceModel struct {
 	PricingType        types.String `tfsdk:"pricing_type"`
 	PricePerHour       types.String `tfsdk:"price_per_hour"`
 	ListedPricePerHour types.String `tfsdk:"listed_price_per_hour"`
+	Amount             types.Map    `tfsdk:"amount"`
 	Start              types.String `tfsdk:"start"`
 	End                types.String `tfsdk:"end"`
 	Activated          types.Bool   `tfsdk:"activated"`
@@ -130,6 +132,22 @@ func (d *PricingDataSource) Schema(
 				Description: "listed price per hour",
 				Computed:    true,
 			},
+			"amount": schema.MapNestedAttribute{
+				Description: "price per hour by currency (krw, usd); usd is in cents",
+				Computed:    true,
+				NestedObject: schema.NestedAttributeObject{
+					Attributes: map[string]schema.Attribute{
+						"per_hour": schema.StringAttribute{
+							Description: "actual price per hour",
+							Computed:    true,
+						},
+						"listed_per_hour": schema.StringAttribute{
+							Description: "listed price per hour",
+							Computed:    true,
+						},
+					},
+				},
+			},
 			"start": schema.StringAttribute{
 				Description: "start time of this pricing validity period",
 				Computed:    true,
@@ -190,6 +208,23 @@ func PricingGetResponseToPricingModel(
 	data.PricingType = types.StringValue(response.PricingType)
 	data.PricePerHour = types.StringValue(response.PricePerHour)
 	data.ListedPricePerHour = types.StringValue(response.ListedPricePerHour)
+
+	amountType := types.ObjectType{
+		AttrTypes: map[string]attr.Type{
+			"per_hour":        types.StringType,
+			"listed_per_hour": types.StringType,
+		},
+	}
+
+	if response.Amount != nil {
+		amount, diags := types.MapValueFrom(ctx, amountType, response.Amount)
+		if diags.HasError() {
+			return diags
+		}
+		data.Amount = amount
+	} else {
+		data.Amount = types.MapNull(amountType)
+	}
 
 	if response.Start != nil {
 		data.Start = types.StringValue(response.Start.String())

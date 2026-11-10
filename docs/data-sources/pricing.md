@@ -44,6 +44,7 @@ data "eci_pricing" "ip_pricing" {
 ### Read-Only
 
 - `activated` (Boolean) whether this pricing is activated
+- `amount` (Attributes Map) price per hour by currency (krw, usd); usd is in cents (see [below for nested schema](#nestedatt--amount))
 - `created` (String) time when the pricing is created
 - `end` (String) end time of this pricing validity period
 - `id` (String) unique identifier of the pricing
@@ -56,3 +57,11 @@ data "eci_pricing" "ip_pricing" {
 - `start` (String) start time of this pricing validity period
 - `tags` (Map of String) user-defined metadata of key-value pairs
 - `zone_id` (String) id of zone that the pricing belongs to
+
+<a id="nestedatt--amount"></a>
+### Nested Schema for `amount`
+
+Read-Only:
+
+- `listed_per_hour` (String) listed price per hour
+- `per_hour` (String) actual price per hour
