@@ -204,5 +204,14 @@ func (p *EliceCloudProvider) Resources(_ context.Context) []func() resource.Reso
 		func() resource.Resource {
 			return res.NewResourcePublicIp()
 		},
+		func() resource.Resource {
+			return res.NewResourceLoadBalancer()
+		},
+		func() resource.Resource {
+			return res.NewResourceKubernetesCluster()
+		},
+		func() resource.Resource {
+			return res.NewResourceKubernetesNodePool()
+		},
 	}
 }

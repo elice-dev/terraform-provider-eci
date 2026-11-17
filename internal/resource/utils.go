@@ -84,3 +84,33 @@ func waitStatus(
 	diags.Append(diag.NewErrorDiagnostic("unexpected status", "reached maximum retry"))
 	return nil, diags
 }
+
+// waitUntil polls until target, stopping early once deletion starts since target is then unreachable.
+func waitUntil(getStatus func() (*string, error), target string, maxRetry int) diag.Diagnostics {
+	status, diags := waitStatus(getStatus, []string{target, "deleting", "deleted"}, maxRetry)
+	if status != nil && *status != target {
+		diags.AddError(
+			"unexpected status",
+			fmt.Sprintf("status is %s; it will not become %s", *status, target),
+		)
+	}
+	return diags
+}
+
+// waitDeleted polls until the resource is deleted, treating 404 as deleted.
+func waitDeleted(getStatus func() (*string, error), maxRetry int) diag.Diagnostics {
+	_, diags := waitStatus(
+		func() (*string, error) {
+			status, err := getStatus()
+			var apiError *api.APIError
+			if errors.As(err, &apiError) && apiError.HttpCode == 404 {
+				deleted := "deleted"
+				return &deleted, nil
+			}
+			return status, err
+		},
+		[]string{"deleted"},
+		maxRetry,
+	)
+	return diags
+}
