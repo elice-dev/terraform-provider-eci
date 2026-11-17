@@ -402,15 +402,14 @@ func (r *ResourceLoadBalancer) getStatus(id string) func() (*string, error) {
 // refreshState reads the load balancer and stores it into state, keeping public_ip_id.
 func (r *ResourceLoadBalancer) refreshState(
 	ctx context.Context, id string, data *ResourceLoadBalancerModel, diags *diag.Diagnostics,
-) *api.ResourceLoadBalancerGetResponse {
+) {
 	response, err := r.client.GetLoadBalancer(id)
 	if err != nil {
 		addResourceError(diags, "failed to get a load balancer", id, err)
-		return nil
+		return
 	}
 
 	diags.Append(resourceLoadBalancerGetResponseToModel(ctx, response, data)...)
-	return response
 }
 
 func (r *ResourceLoadBalancer) Create(
@@ -451,14 +450,14 @@ func (r *ResourceLoadBalancer) Create(
 	tflog.Info(ctx, fmt.Sprintf("created a load balancer: %s", id))
 
 	state := plan
-	getResponse := r.refreshState(ctx, id, &state, &resp.Diagnostics)
+	r.refreshState(ctx, id, &state, &resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	// Save before waiting so a timed-out activation is still tracked in state.
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
-	if resp.Diagnostics.HasError() || getResponse.Status == "activated" {
+	if resp.Diagnostics.HasError() {
 		return
 	}
 

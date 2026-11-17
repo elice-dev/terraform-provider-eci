@@ -123,3 +123,14 @@ func TestLoadBalancerConfig_Invalid(t *testing.T) {
 		})
 	}
 }
+
+// A load balancer only accepts a public ip that is not attached to a network interface.
+func TestPublicIpConfig_WithoutNetworkInterface(t *testing.T) {
+	assertValid(t, validateConfig(t, "eci_public_ip", func(typ tftypes.Object) tftypes.Value {
+		return object(typ, map[string]tftypes.Value{
+			"tags":       strMap(map[string]string{}),
+			"dr":         tftypes.NewValue(tftypes.Bool, false),
+			"pricing_id": str("price-1"),
+		})
+	}))
+}

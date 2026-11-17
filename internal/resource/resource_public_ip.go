@@ -129,8 +129,9 @@ func (r *ResourcePublicIp) Schema(
 				PlanModifiers: []planmodifier.String{stringplanmodifier.UseStateForUnknown()},
 			},
 			"attached_network_interface_id": schema.StringAttribute{
-				Description: "id of network interface that the public ip attaches to",
-				Required:    true,
+				Description: "id of network interface that the public ip attaches to. " +
+					"Leave it unset for a public ip used by a load balancer.",
+				Optional: true,
 			},
 			"dr": schema.BoolAttribute{
 				Description:   "whether to enable DR support",

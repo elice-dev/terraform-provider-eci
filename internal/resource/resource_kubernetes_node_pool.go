@@ -11,7 +11,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/diag"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/resource/schema/int64planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
@@ -187,9 +186,8 @@ func (r *ResourceKubernetesNodePool) Schema(
 				Validators:  []validator.Int64{int64validator.Between(1, 64)},
 			},
 			"current_replicas": schema.Int64Attribute{
-				Description:   "number of nodes currently running",
-				Computed:      true,
-				PlanModifiers: []planmodifier.Int64{int64planmodifier.UseStateForUnknown()},
+				Description: "number of nodes currently running",
+				Computed:    true,
 			},
 			"node_pool_spec": schema.SingleNestedAttribute{
 				Description:   "spec of the nodes",
@@ -261,15 +259,14 @@ func (r *ResourceKubernetesNodePool) getStatus(id string) func() (*string, error
 
 func (r *ResourceKubernetesNodePool) refreshState(
 	ctx context.Context, id string, data *ResourceKubernetesNodePoolModel, diags *diag.Diagnostics,
-) *api.ResourceKubernetesNodePoolGetResponse {
+) {
 	response, err := r.client.GetKubernetesNodePool(id)
 	if err != nil {
 		addResourceError(diags, "failed to get a node pool", id, err)
-		return nil
+		return
 	}
 
 	diags.Append(resourceKubernetesNodePoolGetResponseToModel(ctx, response, data)...)
-	return response
 }
 
 func (r *ResourceKubernetesNodePool) Create(
@@ -311,14 +308,14 @@ func (r *ResourceKubernetesNodePool) Create(
 	tflog.Info(ctx, fmt.Sprintf("created a node pool: %s", id))
 
 	state := plan
-	getResponse := r.refreshState(ctx, id, &state, &resp.Diagnostics)
+	r.refreshState(ctx, id, &state, &resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
 		return
 	}
 
 	// Save before waiting so a timed-out provisioning is still tracked in state.
 	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
-	if resp.Diagnostics.HasError() || getResponse.Status == "ready" {
+	if resp.Diagnostics.HasError() {
 		return
 	}
 
