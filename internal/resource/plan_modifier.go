@@ -32,7 +32,8 @@ func (m errorOnChangeModifier) PlanModifyString(
 	if req.State.Raw.IsNull() || req.Plan.Raw.IsNull() {
 		return
 	}
-	if req.PlanValue.IsUnknown() || req.PlanValue.Equal(req.StateValue) {
+	// A null state value (import, or a create that failed midway) has nothing to compare against.
+	if req.StateValue.IsNull() || req.PlanValue.IsUnknown() || req.PlanValue.Equal(req.StateValue) {
 		return
 	}
 

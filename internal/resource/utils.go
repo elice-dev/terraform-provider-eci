@@ -56,6 +56,9 @@ func isResourceDeleted(err error, resourceKey string, deletedStatus string) (str
 	return "", err
 }
 
+// sleep is replaced in tests.
+var sleep = time.Sleep
+
 func waitStatus(
 	getStatus func() (*string, error), targetStatuses []string, maxRetry int,
 ) (*string, diag.Diagnostics) {
@@ -69,16 +72,16 @@ func waitStatus(
 				"failed to get status",
 				fmt.Sprintf("retry: %d (err: %s)", retryIndex, err.Error()),
 			))
-			continue
-		}
-
-		for _, targetStatus := range targetStatuses {
-			if targetStatus == *status {
-				return &targetStatus, diags
+		} else {
+			for _, targetStatus := range targetStatuses {
+				if targetStatus == *status {
+					return &targetStatus, diags
+				}
 			}
 		}
 
-		time.Sleep(time.Duration(min(0.5+math.Pow(2, float64(retryIndex)), 15)) * time.Second)
+		// Back off on errors too, so a short API outage does not use up every retry at once.
+		sleep(time.Duration(min(0.5+math.Pow(2, float64(retryIndex)), 15)) * time.Second)
 	}
 
 	diags.Append(diag.NewErrorDiagnostic("unexpected status", "reached maximum retry"))
@@ -97,13 +100,17 @@ func waitUntil(getStatus func() (*string, error), target string, maxRetry int) d
 	return diags
 }
 
+func isNotFound(err error) bool {
+	var apiError *api.APIError
+	return errors.As(err, &apiError) && apiError.HttpCode == 404
+}
+
 // waitDeleted polls until the resource is deleted, treating 404 as deleted.
 func waitDeleted(getStatus func() (*string, error), maxRetry int) diag.Diagnostics {
 	_, diags := waitStatus(
 		func() (*string, error) {
 			status, err := getStatus()
-			var apiError *api.APIError
-			if errors.As(err, &apiError) && apiError.HttpCode == 404 {
+			if isNotFound(err) {
 				deleted := "deleted"
 				return &deleted, nil
 			}

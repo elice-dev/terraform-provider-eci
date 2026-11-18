@@ -18,10 +18,22 @@ data "eci_pricing" "lb_pricing" {
   pricing_type = "ondemand"
 }
 
+data "eci_pricing" "ip_pricing" {
+  name         = "Public IP"
+  pricing_type = "ondemand"
+}
+
+# A load balancer needs a public ip that is not attached to a network interface.
+resource "eci_public_ip" "lb_ip" {
+  dr         = false
+  pricing_id = data.eci_pricing.ip_pricing.id
+  tags       = {}
+}
+
 resource "eci_load_balancer" "my_load_balancer" {
   name                = "web"
   attached_network_id = "0f4c2a3e-2a31-4b8e-9a51-8d1f8c0c6b10"
-  public_ip_id        = "6b1d9e57-3c2f-4f0a-8e4e-1a7b2c3d4e5f"
+  public_ip_id        = eci_public_ip.lb_ip.id
   pricing_id          = data.eci_pricing.lb_pricing.id
 
   rules = [

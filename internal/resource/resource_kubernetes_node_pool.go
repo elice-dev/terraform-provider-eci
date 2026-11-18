@@ -9,6 +9,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/int64validator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/objectplanmodifier"
@@ -307,6 +308,9 @@ func (r *ResourceKubernetesNodePool) Create(
 	id := response.Id.String()
 	tflog.Info(ctx, fmt.Sprintf("created a node pool: %s", id))
 
+	// Track the id first so a failure below leaves a tainted resource, not an untracked one.
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), id)...)
+
 	state := plan
 	r.refreshState(ctx, id, &state, &resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
@@ -341,7 +345,19 @@ func (r *ResourceKubernetesNodePool) Read(
 		return
 	}
 
-	r.refreshState(ctx, state.Id.ValueString(), &state, &resp.Diagnostics)
+	id := state.Id.ValueString()
+	response, err := r.client.GetKubernetesNodePool(id)
+	// Deleted outside Terraform: drop it so the next plan creates it again.
+	if isNotFound(err) || (err == nil && response.Status == "deleted") {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+	if err != nil {
+		addResourceError(&resp.Diagnostics, "failed to get a node pool", id, err)
+		return
+	}
+
+	resp.Diagnostics.Append(resourceKubernetesNodePoolGetResponseToModel(ctx, response, &state)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}

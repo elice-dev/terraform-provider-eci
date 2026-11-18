@@ -196,3 +196,32 @@ func TestLoadBalancerSchema_ReplaceOnlyImmutableFields(t *testing.T) {
 		t.Errorf("no attribute should reject changes, got %v", rejected)
 	}
 }
+
+func TestLoadBalancerDeleteResult(t *testing.T) {
+	conflict := func(status string) error {
+		detail := map[string]interface{}{
+			"resource_load_balancer": map[string]interface{}{"status": status},
+		}
+		code := "unexpected_status"
+		return &api.APIError{HttpCode: 409, Code: &code, Detail: &detail}
+	}
+
+	cases := []struct {
+		name    string
+		err     error
+		wantErr bool
+	}{
+		{"deleted now", nil, false},
+		{"not found", &api.APIError{HttpCode: 404}, false},
+		{"already deleted", conflict("deleted"), false},
+		{"retried while deleting", conflict("deleting"), false},
+		{"still requested", conflict("requested"), true},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			if _, err := loadBalancerDeleteResult(tc.err); (err != nil) != tc.wantErr {
+				t.Errorf("err = %v, wantErr %v", err, tc.wantErr)
+			}
+		})
+	}
+}

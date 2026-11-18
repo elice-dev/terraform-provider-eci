@@ -12,6 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework-validators/listvalidator"
 	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/diag"
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -449,6 +450,9 @@ func (r *ResourceLoadBalancer) Create(
 	id := response.Id.String()
 	tflog.Info(ctx, fmt.Sprintf("created a load balancer: %s", id))
 
+	// Track the id first so a failure below leaves a tainted resource, not an untracked one.
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("id"), id)...)
+
 	state := plan
 	r.refreshState(ctx, id, &state, &resp.Diagnostics)
 	if resp.Diagnostics.HasError() {
@@ -483,7 +487,19 @@ func (r *ResourceLoadBalancer) Read(
 		return
 	}
 
-	r.refreshState(ctx, state.Id.ValueString(), &state, &resp.Diagnostics)
+	id := state.Id.ValueString()
+	response, err := r.client.GetLoadBalancer(id)
+	// Deleted outside Terraform: drop it so the next plan creates it again.
+	if isNotFound(err) || (err == nil && response.Status == "deleted") {
+		resp.State.RemoveResource(ctx)
+		return
+	}
+	if err != nil {
+		addResourceError(&resp.Diagnostics, "failed to get a load balancer", id, err)
+		return
+	}
+
+	resp.Diagnostics.Append(resourceLoadBalancerGetResponseToModel(ctx, response, &state)...)
 	if resp.Diagnostics.HasError() {
 		return
 	}
@@ -550,6 +566,23 @@ func loadBalancerPatch(
 	return namePtr, rulesPtr, tagsPtr, diags
 }
 
+// loadBalancerDeleteResult also accepts deleting: eci-api rejects DELETE unless the load balancer
+// is activated, so a destroy retried after a timed-out wait would otherwise fail until it is gone.
+func loadBalancerDeleteResult(err error) (string, error) {
+	successMessage, deletedErr := isResourceDeleted(err, "resource_load_balancer", "deleted")
+	if deletedErr == nil {
+		return successMessage, nil
+	}
+	if _, deletingErr := isResourceDeleted(
+		err,
+		"resource_load_balancer",
+		"deleting",
+	); deletingErr == nil {
+		return "deletion is already in progress", nil
+	}
+	return "", deletedErr
+}
+
 func (r *ResourceLoadBalancer) Delete(
 	ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse,
 ) {
@@ -563,7 +596,7 @@ func (r *ResourceLoadBalancer) Delete(
 	id := state.Id.ValueString()
 
 	_, err := r.client.DeleteLoadBalancer(id)
-	successMessage, err := isResourceDeleted(err, "resource_load_balancer", "deleted")
+	successMessage, err := loadBalancerDeleteResult(err)
 	if err != nil {
 		addResourceError(&resp.Diagnostics, "failed to delete a load balancer", id, err)
 		return

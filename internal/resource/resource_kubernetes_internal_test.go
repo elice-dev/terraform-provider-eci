@@ -47,6 +47,14 @@ func TestErrorOnChange(t *testing.T) {
 			false,
 		},
 		{
+			"null in state (import)",
+			existing,
+			existing,
+			types.StringNull(),
+			types.StringValue("n3w"),
+			false,
+		},
+		{
 			"changed",
 			existing,
 			existing,

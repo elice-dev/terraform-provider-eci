@@ -324,6 +324,8 @@ func (r *ResourcePublicIp) Update(
 
 	id := state.Id.ValueString()
 
+	// Send the attachment only when it changed; a null value would detach the network interface.
+	var attachedNetworkInterfaceIdPtr **string = nil
 	var attachedMachineIdPtr *string = nil
 	if !plan.AttachedNetworkInterfaceId.Equal(state.AttachedNetworkInterfaceId) {
 		if !state.AttachedNetworkInterfaceId.IsNull() && !plan.AttachedNetworkInterfaceId.IsNull() {
@@ -335,6 +337,7 @@ func (r *ResourcePublicIp) Update(
 		}
 
 		attachedMachineIdPtr = plan.AttachedNetworkInterfaceId.ValueStringPointer()
+		attachedNetworkInterfaceIdPtr = &attachedMachineIdPtr
 	}
 
 	var tagsPtr *map[string]string = nil
@@ -348,7 +351,7 @@ func (r *ResourcePublicIp) Update(
 		tagsPtr = &tags
 	}
 
-	_, err := r.client.PatchPublicIp(id, &attachedMachineIdPtr, tagsPtr)
+	_, err := r.client.PatchPublicIp(id, attachedNetworkInterfaceIdPtr, tagsPtr)
 
 	if err != nil {
 		addResourceError(&resp.Diagnostics, "failed to patch a public ip", id, err)
